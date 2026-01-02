@@ -66,7 +66,6 @@ window.deleteAllNotices = async function () {
   });
   location.reload();
 };
-const ADMIN_PASSWORD = "yanogbu123";
 
 window.adminLogin = function () {
   alert("관리자 로그인 함수 실행됨"); // ← 테스트용
