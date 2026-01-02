@@ -11,14 +11,15 @@ import {
   orderBy
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// 🔑 Firebase 설정 (⚠️ 네 프로젝트 값으로 교체)
+// 🔑 Firebase 설정 (yanogbu 프로젝트)
 const firebaseConfig = {
-  apiKey: "여기에_apiKey",
-  authDomain: "여기에_authDomain",
-  projectId: "여기에_projectId",
-  storageBucket: "여기에_storageBucket",
-  messagingSenderId: "여기에_messagingSenderId",
-  appId: "여기에_appId"
+  apiKey: "AIzaSyDK7LdFb1ZzxjfLHbHWgD3TvIDBxESSp6M",
+  authDomain: "yanogbu.firebaseapp.com",
+  projectId: "yanogbu",
+  storageBucket: "yanogbu.firebasestorage.app",
+  messagingSenderId: "383928455310",
+  appId: "1:383928455310:web:2f1890e588fdb67c8979df",
+  measurementId: "G-C6X972MNHN"
 };
 
 // 초기화
@@ -30,7 +31,7 @@ const db = getFirestore(app);
 // =============================
 window.adminLogin = function () {
   const pw = prompt("관리자 비밀번호를 입력하세요");
-  if (pw === "1234") { // ← 여기 비밀번호 바꿔도 됨
+  if (pw === "1234") { // ← 필요하면 바꿔도 됨
     document.getElementById("adminArea").classList.remove("hidden");
     alert("관리자 로그인 성공");
   } else {
