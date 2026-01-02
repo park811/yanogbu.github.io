@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>야농부 🏀</title>
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<header>🏀 야농부</header>
+
+<nav>
+  <button onclick="show('notice')">공지</button>
+  <button onclick="show('gallery')">사진</button>
+</nav>
+
+<section id="notice">
+  <input id="noticeInput" placeholder="공지 입력"/>
+  <button onclick="addNotice()">등록</button>
+  <ul id="noticeList"></ul>
+</section>
+
+<section id="gallery" class="hidden">
+  <input type="file" id="imgInput" accept="image/*"/>
+  <div id="galleryBox"></div>
+</section>
+
+<script src="script.js"></script>
+</body>
+</html>
