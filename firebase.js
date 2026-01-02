@@ -1,72 +1,39 @@
+/* =============================
+   Firebase 설정 (네 값으로 교체)
+============================= */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, query, orderBy } 
-from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import { getStorage, ref, uploadBytes, getDownloadURL } 
-from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  deleteDoc,
+  doc
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDK7LdFb1ZzxjfLHbHWgD3TvIDBxESSp6M",
-  authDomain: "yanogbu.firebaseapp.com",
-  projectId: "yanogbu",
-  storageBucket: "yanogbu.firebasestorage.app",
-  messagingSenderId: "383928455310",
-  appId: "1:383928455310:web:2f1890e588fdb67c8979df",
-  measurementId: "G-C6X972MNHN"
+  apiKey: "네_API_KEY",
+  authDomain: "네_AUTH_DOMAIN",
+  projectId: "네_PROJECT_ID",
+  storageBucket: "네_STORAGE_BUCKET",
+  messagingSenderId: "네_SENDER_ID",
+  appId: "네_APP_ID"
 };
 
-
+/* =============================
+   Firebase 초기화
+============================= */
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const storage = getStorage(app);
 
-// 공지 불러오기
-const noticeList = document.getElementById("noticeList");
+/* =============================
+   관리자 비밀번호
+============================= */
+const ADMIN_PASSWORD = "yanogbu123";
 
-const q = query(collection(db, "notices"), orderBy("time", "desc"));
-const snapshot = await getDocs(q);
-snapshot.forEach(doc => {
-  const li = document.createElement("li");
-  li.textContent = doc.data().text;
-  noticeList.appendChild(li);
-});
-
-// 공지 추가
-window.addNotice = async function () {
-  const input = document.getElementById("noticeInput");
-  if (!input.value) return;
-
-  await addDoc(collection(db, "notices"), {
-    text: input.value,
-    time: Date.now()
-  });
-
-  location.reload();
-};
-
-// 이미지 업로드
-document.getElementById("imgInput").addEventListener("change", async e => {
-  const file = e.target.files[0];
-  if (!file) return;
-
-  const imgRef = ref(storage, `images/${Date.now()}_${file.name}`);
-  await uploadBytes(imgRef, file);
-  const url = await getDownloadURL(imgRef);
-
-  const img = document.createElement("img");
-  img.src = url;
-  document.getElementById("galleryBox").appendChild(img);
-});
-import { deleteDoc, doc, getDocs } 
-from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-window.deleteAllNotices = async function () {
-  const snapshot = await getDocs(collection(db, "notices"));
-  snapshot.forEach(async d => {
-    await deleteDoc(doc(db, "notices", d.id));
-  });
-  location.reload();
-};
-
+/* =============================
+   관리자 로그인 (⭐ 핵심)
+============================= */
 window.adminLogin = function () {
   const pw = prompt("관리자 비밀번호를 입력하세요");
   if (pw === ADMIN_PASSWORD) {
@@ -79,14 +46,70 @@ window.adminLogin = function () {
 };
 
 function enableAdmin() {
-  document.getElementById("adminArea").classList.remove("hidden");
-  document.getElementById("adminGallery").classList.remove("hidden");
+  document.getElementById("adminArea")?.classList.remove("hidden");
+  document.getElementById("adminGallery")?.classList.remove("hidden");
 }
 
+/* =============================
+   공지 추가
+============================= */
+window.addNotice = async function () {
+  const input = document.getElementById("noticeInput");
+  if (!input.value) return;
+
+  await addDoc(collection(db, "notices"), {
+    text: input.value,
+    created: Date.now()
+  });
+
+  input.value = "";
+  loadNotices();
+};
+
+/* =============================
+   공지 불러오기
+============================= */
+async function loadNotices() {
+  const list = document.getElementById("noticeList");
+  list.innerHTML = "";
+
+  const snapshot = await getDocs(collection(db, "notices"));
+  snapshot.forEach(docu => {
+    const li = document.createElement("li");
+    li.textContent = docu.data().text;
+    list.appendChild(li);
+  });
+}
+
+/* =============================
+   공지 전체 삭제 (관리자만)
+============================= */
+window.deleteAllNotices = async function () {
+  if (!confirm("공지 전부 삭제할까요?")) return;
+
+  const snapshot = await getDocs(collection(db, "notices"));
+  snapshot.forEach(async d => {
+    await deleteDoc(doc(db, "notices", d.id));
+  });
+
+  loadNotices();
+};
+
+/* =============================
+   페이지 로드 시
+============================= */
 window.onload = () => {
+  loadNotices();
   if (localStorage.getItem("admin") === "true") {
     enableAdmin();
   }
 };
 
-const ADMIN_PASSWORD = "wowjd";
+/* =============================
+   섹션 전환 (공지 / 사진)
+============================= */
+window.show = function (id) {
+  document.getElementById("notice").classList.add("hidden");
+  document.getElementById("gallery").classList.add("hidden");
+  document.getElementById(id).classList.remove("hidden");
+};
