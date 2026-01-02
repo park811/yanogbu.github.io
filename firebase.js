@@ -69,13 +69,11 @@ window.deleteAllNotices = async function () {
 const ADMIN_PASSWORD = "yanogbu123";
 
 window.adminLogin = function () {
+  alert("관리자 로그인 함수 실행됨"); // ← 테스트용
   const pw = prompt("관리자 비밀번호를 입력하세요");
   if (pw === ADMIN_PASSWORD) {
     localStorage.setItem("admin", "true");
     enableAdmin();
-    alert("관리자 로그인 완료");
-  } else {
-    alert("비밀번호가 틀렸습니다");
   }
 };
 
