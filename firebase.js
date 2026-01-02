@@ -54,7 +54,7 @@ function enableAdmin() {
    공지 추가
 ============================= */
 window.addNotice = async function () {
-  alert("addNotice 실행됨");
+  alert("addNotice 실행됨"); // 테스트용
 
   const input = document.getElementById("noticeInput");
   if (!input.value) {
@@ -69,7 +69,6 @@ window.addNotice = async function () {
 
   alert("Firestore에 저장 시도 끝");
 };
-
 /* =============================
    공지 불러오기
 ============================= */
