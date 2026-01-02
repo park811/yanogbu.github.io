@@ -66,3 +66,26 @@ window.deleteAllNotices = async function () {
   });
   location.reload();
 };
+const ADMIN_PASSWORD = "yanogbu123";
+
+window.adminLogin = function () {
+  const pw = prompt("관리자 비밀번호를 입력하세요");
+  if (pw === ADMIN_PASSWORD) {
+    localStorage.setItem("admin", "true");
+    enableAdmin();
+    alert("관리자 로그인 완료");
+  } else {
+    alert("비밀번호가 틀렸습니다");
+  }
+};
+
+function enableAdmin() {
+  document.getElementById("adminArea").classList.remove("hidden");
+  document.getElementById("adminGallery").classList.remove("hidden");
+}
+
+window.onload = () => {
+  if (localStorage.getItem("admin") === "true") {
+    enableAdmin();
+  }
+};
