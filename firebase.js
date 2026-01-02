@@ -54,16 +54,20 @@ function enableAdmin() {
    공지 추가
 ============================= */
 window.addNotice = async function () {
+  alert("addNotice 실행됨");
+
   const input = document.getElementById("noticeInput");
-  if (!input.value) return;
+  if (!input.value) {
+    alert("입력값 없음");
+    return;
+  }
 
   await addDoc(collection(db, "notices"), {
     text: input.value,
     created: Date.now()
   });
 
-  input.value = "";
-  loadNotices();
+  alert("Firestore에 저장 시도 끝");
 };
 
 /* =============================
