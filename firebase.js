@@ -56,3 +56,13 @@ document.getElementById("imgInput").addEventListener("change", async e => {
   img.src = url;
   document.getElementById("galleryBox").appendChild(img);
 });
+import { deleteDoc, doc, getDocs } 
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+window.deleteAllNotices = async function () {
+  const snapshot = await getDocs(collection(db, "notices"));
+  snapshot.forEach(async d => {
+    await deleteDoc(doc(db, "notices", d.id));
+  });
+  location.reload();
+};
