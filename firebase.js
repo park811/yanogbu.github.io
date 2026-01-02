@@ -89,3 +89,5 @@ window.onload = () => {
     enableAdmin();
   }
 };
+
+const ADMIN_PASSWORD = "wowjd";
