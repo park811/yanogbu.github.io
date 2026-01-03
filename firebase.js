@@ -66,7 +66,6 @@ window.uploadImage = async function () {
     const url = await getDownloadURL(storageRef);
 
     await addDoc(collection(db, "gallery"), { url, created: Date.now() });
-
     alert("업로드 성공!");
     loadGallery();
   } catch (e) {
@@ -74,6 +73,7 @@ window.uploadImage = async function () {
     alert("업로드 실패! 콘솔 확인");
   }
 };
+
 // 사진 불러오기
 window.loadGallery = async function () {
   const box = document.getElementById("galleryBox");
