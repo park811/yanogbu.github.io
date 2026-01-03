@@ -22,7 +22,7 @@ const storage = getStorage(app);
 // 관리자 로그인
 window.adminLogin = function () {
   const pw = prompt("관리자 비밀번호를 입력하세요");
-  if (pw === "1234") document.getElementById("adminArea").classList.remove("hidden");
+  if (pw === "섹스") document.getElementById("adminArea").classList.remove("hidden");
   else alert("비밀번호 틀림");
 };
 
