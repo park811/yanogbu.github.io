@@ -2,60 +2,85 @@ body {
   margin: 0;
   background: #000;
   color: #fff;
-  font-family: sans-serif;
+  font-family: 'Segoe UI', sans-serif;
 }
 
 header {
   background: #ff7a00;
   text-align: center;
-  padding: 16px;
-  font-size: 22px;
+  padding: 20px;
+  font-size: 26px;
   font-weight: bold;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
 }
 
 nav {
   display: flex;
+  background: #111;
 }
 
 nav button {
   flex: 1;
-  padding: 12px;
+  padding: 14px;
   border: none;
   background: #111;
   color: #ff7a00;
   font-size: 16px;
+  cursor: pointer;
+  transition: 0.2s;
 }
 
-section {
-  padding: 15px;
+nav button:hover {
+  background: #222;
+  transform: scale(1.05);
 }
 
-.hidden {
-  display: none;
+section { padding: 16px; }
+.hidden { display: none; }
+
+#noticeList { list-style: none; padding: 0; }
+#noticeList li {
+  background: #111;
+  margin: 8px 0;
+  padding: 12px 16px;
+  border-left: 4px solid #ff7a00;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  word-wrap: break-word;
 }
 
+#adminArea { margin-bottom: 16px; }
+#adminArea input[type=text], #adminArea input[type=file] {
+  padding: 8px;
+  border-radius: 6px;
+  border: none;
+  width: 65%;
+  margin-right: 8px;
+}
+#adminArea button {
+  background: #ff7a00;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  color: #fff;
+  cursor: pointer;
+  transition: 0.2s;
+}
+#adminArea button:hover { background: #e76f00; transform: scale(1.05); }
+
+#galleryBox {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 10px;
+}
 #galleryBox img {
   width: 100%;
-  margin-top: 10px;
   border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+  object-fit: cover;
 }
 
-.hidden {
-  display: none;
-}
-
-#notice button {
-  position: relative;
-  z-index: 9999;
-  pointer-events: auto;
-}
-
-nav {
-  position: relative;
-  z-index: 1;
-}
-
-section {
-  position: relative;
-  z-index: 2;
+@media (max-width: 600px) {
+  #galleryBox { grid-template-columns: 1fr; }
 }
