@@ -1,17 +1,10 @@
-// 🔥 Firebase SDK
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import {
-  getFirestore,
-  collection,
-  addDoc,
-  getDocs,
-  deleteDoc,
-  doc,
-  query,
-  orderBy
+  getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
-// 🔑 Firebase 설정 (yanogbu 프로젝트)
+// Firebase 설정
 const firebaseConfig = {
   apiKey: "AIzaSyDK7LdFb1ZzxjfLHbHWgD3TvIDBxESSp6M",
   authDomain: "yanogbu.firebaseapp.com",
@@ -22,53 +15,31 @@ const firebaseConfig = {
   measurementId: "G-C6X972MNHN"
 };
 
-// 초기화
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const storage = getStorage(app);
 
-// =============================
-// 🔐 관리자 로그인
-// =============================
+// 관리자 로그인
 window.adminLogin = function () {
   const pw = prompt("관리자 비밀번호를 입력하세요");
-  if (pw === "1234") { // ← 필요하면 바꿔도 됨
-    document.getElementById("adminArea").classList.remove("hidden");
-    alert("관리자 로그인 성공");
-  } else {
-    alert("비밀번호 틀림");
-  }
+  if (pw === "1234") document.getElementById("adminArea").classList.remove("hidden");
+  else alert("비밀번호 틀림");
 };
 
-// =============================
-// 📝 공지 추가
-// =============================
+// 공지 추가
 window.addNotice = async function () {
   const input = document.getElementById("noticeInput");
   if (!input.value) return;
-
-  await addDoc(collection(db, "notices"), {
-    text: input.value,
-    created: Date.now()
-  });
-
+  await addDoc(collection(db, "notices"), { text: input.value, created: Date.now() });
   input.value = "";
   loadNotices();
 };
 
-// =============================
-// 📋 공지 불러오기
-// =============================
+// 공지 불러오기
 window.loadNotices = async function () {
   const list = document.getElementById("noticeList");
   list.innerHTML = "";
-
-  const q = query(
-    collection(db, "notices"),
-    orderBy("created", "desc")
-  );
-
-  const snap = await getDocs(q);
-
+  const snap = await getDocs(query(collection(db, "notices"), orderBy("created", "desc")));
   snap.forEach(d => {
     const li = document.createElement("li");
     li.textContent = d.data().text;
@@ -76,19 +47,39 @@ window.loadNotices = async function () {
   });
 };
 
-// =============================
-// 🗑️ 공지 전체 삭제 (관리자용)
-// =============================
+// 공지 전체 삭제
 window.deleteAllNotices = async function () {
-  if (!confirm("정말 모든 공지를 삭제할까요?")) return;
-
+  if (!confirm("정말 삭제할까요?")) return;
   const snap = await getDocs(collection(db, "notices"));
   snap.forEach(d => deleteDoc(doc(db, "notices", d.id)));
-
   loadNotices();
 };
 
-// =============================
-// 🚀 페이지 열리면 자동 실행
-// =============================
+// 사진 업로드
+window.uploadImage = async function () {
+  const file = document.getElementById("imgInput").files[0];
+  if (!file) return;
+  const storageRef = ref(storage, 'gallery/' + file.name);
+  await uploadBytes(storageRef, file);
+  const url = await getDownloadURL(storageRef);
+
+  // Firestore에 URL 저장
+  await addDoc(collection(db, "gallery"), { url, created: Date.now() });
+  loadGallery();
+};
+
+// 사진 불러오기
+window.loadGallery = async function () {
+  const box = document.getElementById("galleryBox");
+  box.innerHTML = "";
+  const snap = await getDocs(query(collection(db, "gallery"), orderBy("created", "desc")));
+  snap.forEach(d => {
+    const img = document.createElement("img");
+    img.src = d.data().url;
+    box.appendChild(img);
+  });
+};
+
+// 초기 로드
 loadNotices();
+loadGallery();
