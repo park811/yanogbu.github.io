@@ -1,19 +1,18 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>야농부 🏀</title>
-<link rel="stylesheet" href="style.css"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>야농부 🏀</title>
+  <link rel="stylesheet" href="style.css"/>
 </head>
-
 <body>
 
 <header>🏀 야농부</header>
 
 <nav>
-  <button onclick="show('notice')">공지</button>
-  <button onclick="show('gallery')">사진</button>
+  <button type="button" onclick="showSection('notice')">공지</button>
+  <button type="button" onclick="showSection('gallery')">사진</button>
 </nav>
 
 <section id="notice">
@@ -21,20 +20,27 @@
 
   <div id="adminArea" class="hidden">
     <input id="noticeInput" placeholder="공지 입력" />
-    <button onclick="addNotice()">등록</button>
-    <button onclick="deleteAllNotices()">공지 전체 삭제</button>
+    <button type="button" onclick="addNotice()">등록</button>
+    <button type="button" onclick="deleteAllNotices()">전체 삭제</button>
+    <input type="file" id="imgInput" accept="image/*"/>
+    <button onclick="uploadImage()">사진 업로드</button>
   </div>
 
   <ul id="noticeList"></ul>
 </section>
 
 <section id="gallery" class="hidden">
-  <div id="adminGallery" class="hidden">
-    <input type="file" id="imgInput" accept="image/*" />
-  </div>
   <div id="galleryBox"></div>
 </section>
 
 <script type="module" src="firebase.js"></script>
+<script>
+  // 섹션 전환
+  function showSection(id) {
+    document.querySelectorAll('section').forEach(sec => sec.classList.add('hidden'));
+    document.getElementById(id).classList.remove('hidden');
+  }
+</script>
+
 </body>
 </html>
