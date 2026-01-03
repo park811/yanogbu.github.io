@@ -58,16 +58,22 @@ window.deleteAllNotices = async function () {
 // 사진 업로드
 window.uploadImage = async function () {
   const file = document.getElementById("imgInput").files[0];
-  if (!file) return;
-  const storageRef = ref(storage, 'gallery/' + file.name);
-  await uploadBytes(storageRef, file);
-  const url = await getDownloadURL(storageRef);
+  if (!file) return alert("파일을 선택하세요!");
 
-  // Firestore에 URL 저장
-  await addDoc(collection(db, "gallery"), { url, created: Date.now() });
-  loadGallery();
+  try {
+    const storageRef = ref(storage, 'gallery/' + Date.now() + '_' + file.name);
+    await uploadBytes(storageRef, file);
+    const url = await getDownloadURL(storageRef);
+
+    await addDoc(collection(db, "gallery"), { url, created: Date.now() });
+
+    alert("업로드 성공!");
+    loadGallery();
+  } catch (e) {
+    console.error("업로드 실패:", e);
+    alert("업로드 실패! 콘솔 확인");
+  }
 };
-
 // 사진 불러오기
 window.loadGallery = async function () {
   const box = document.getElementById("galleryBox");
